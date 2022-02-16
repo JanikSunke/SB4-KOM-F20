@@ -7,6 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
 public class CollisionSystem implements IPostEntityProcessingService{
+    String PLAYER = "class dk.sdu.mmmi.cbse.playersystem.Player";
+    String ENEMY = "class dk.sdu.mmmi.cbse.enemysystem.Enemy";
+
     @Override
     public void process(GameData gameData, World world) {
         for(Entity entity : world.getEntities()){
@@ -15,7 +18,12 @@ public class CollisionSystem implements IPostEntityProcessingService{
                     continue;
                 }
                 if (collision(entity, entity1)) {
-                    world.removeEntity(entity);
+                    if (entity1.getClass().toString().equals(PLAYER) || entity1.getClass().toString().equals(ENEMY)) {
+                        world.removeEntity(entity1);
+                    } else {
+                        System.out.println(entity.getClass() + " Removed");
+                        world.removeEntity(entity);
+                    }
                 }
             }
         }
