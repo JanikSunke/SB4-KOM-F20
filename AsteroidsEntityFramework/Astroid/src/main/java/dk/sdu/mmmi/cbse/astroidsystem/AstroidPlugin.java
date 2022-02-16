@@ -21,8 +21,6 @@ public class AstroidPlugin implements IGamePluginService {
         // Add entities to the world
         astroid = createAstroid(gameData);
         world.addEntity(astroid);
-
-
     }
 
     private Entity createAstroid(GameData gameData) {
@@ -32,18 +30,9 @@ public class AstroidPlugin implements IGamePluginService {
         float maxSpeed = 50;
         float rotationSpeed = 5;
         float radius = 8;
+        float x = gameData.getDisplayHeight()/4;
+        float y = gameData.getDisplayWidth()/4;
 
-        boolean spawnPointDecider = 1 < (float) Math.random()*2;
-        float x;
-        float y;
-        if(spawnPointDecider) {
-             x = gameData.getDisplayWidth();
-             y = gameData.getDisplayHeight() * (float) Math.random();
-        }
-        else{
-             x = gameData.getDisplayWidth() * (float) Math.random();
-             y = gameData.getDisplayHeight();
-        }
         float radians = 3.1415f * (float)(Math.random()*2);
 
         Entity astroidEntity = new Astroid();

@@ -9,28 +9,21 @@ import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 public class CollisionSystem implements IPostEntityProcessingService{
     @Override
     public void process(GameData gameData, World world) {
-
         for(Entity entity : world.getEntities()){
             for(Entity entity1 : world.getEntities()){
                 if (entity.getClass() == entity1.getClass()){
                     continue;
                 }
-                PositionPart pos1 = entity.getPart(PositionPart.class);
-                PositionPart pos2 = entity1.getPart(PositionPart.class);
-                float distance = (float) Math.sqrt(Math.pow(pos1.getX() - pos2.getX(),2) - Math.pow(pos1.getY() - pos2.getY(),2));
-                if(distance < entity.getRadius() + entity1.getRadius()){
-                    //collision
-                    LifePart lifepartE = entity.getPart(LifePart.class);
-                    LifePart lifepartE1 = entity.getPart(LifePart.class);
+                if (collision(entity, entity1)) {
                     world.removeEntity(entity);
-                    //todo proper life collision
-                    if(lifepartE != null && lifepartE1 != null){
-
-                        lifepartE.setLife(lifepartE.getLife() - 1);
-                        lifepartE1.setLife(lifepartE1.getLife() - 1);
-                    }
                 }
             }
         }
+    }
+    public boolean collision(Entity p1, Entity p2) {
+        float dx = p1.getShapeX()[1] - p2.getShapeX()[1];
+        float dy = p1.getShapeY()[1] - p2.getShapeY()[1];
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        return distance < p1.getRadius() + p2.getRadius();
     }
 }
