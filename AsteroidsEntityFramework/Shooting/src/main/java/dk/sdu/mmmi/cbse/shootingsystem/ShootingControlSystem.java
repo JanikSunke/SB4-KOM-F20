@@ -14,7 +14,7 @@ public class ShootingControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Shooting.class)) {
             for (Entity player: world.getEntities()) {
-                if (player.getClass().toString().equals("dk.sdu.mmmi.cbse.playersystem.Player.java")) {
+                if (player.getClass().toString().equals("class dk.sdu.mmmi.cbse.playersystem.Player")) {
                     PositionPart positionPart = bullet.getPart(PositionPart.class);
                     MovingPart movingPart = bullet.getPart(MovingPart.class);
                     PositionPart playerMov = player.getPart(PositionPart.class);

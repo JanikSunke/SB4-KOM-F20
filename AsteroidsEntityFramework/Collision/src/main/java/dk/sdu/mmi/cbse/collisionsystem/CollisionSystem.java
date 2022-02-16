@@ -9,20 +9,34 @@ import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 public class CollisionSystem implements IPostEntityProcessingService{
     String PLAYER = "class dk.sdu.mmmi.cbse.playersystem.Player";
     String ENEMY = "class dk.sdu.mmmi.cbse.enemysystem.Enemy";
+    String BULLET = "class dk.sdu.mmmi.cbse.shootingsystem.Shooting";
+    int kills = 0;
 
     @Override
     public void process(GameData gameData, World world) {
         for(Entity entity : world.getEntities()){
             for(Entity entity1 : world.getEntities()){
-                if (entity.getClass() == entity1.getClass()){
-                    continue;
-                }
-                if (collision(entity, entity1)) {
-                    if (entity1.getClass().toString().equals(PLAYER) || entity1.getClass().toString().equals(ENEMY)) {
-                        world.removeEntity(entity1);
-                    } else {
-                        System.out.println(entity.getClass() + " Removed");
-                        world.removeEntity(entity);
+                if (!(entity.getClass() == entity1.getClass())) {
+                    if (collision(entity, entity1)) {
+                        if ((entity.getClass().toString().equals(BULLET) && entity1.getClass().toString().equals(PLAYER)) || (entity1.getClass().toString().equals(BULLET) && entity.getClass().toString().equals(PLAYER))) {
+                            break;
+                        } else if (entity1.getClass().toString().equals(PLAYER) || entity1.getClass().toString().equals(ENEMY)) {
+                            world.removeEntity(entity1);
+                        } else {
+                            System.out.println("\n\n\n\n\n");
+                            kills++;
+                            System.out.println("----------------------");
+                            System.out.println("KILLS: " + kills);
+                            System.out.println("----------------------");
+                            if (kills == 10) {
+                                System.out.println("YOU WIN");
+                            }
+                            if (entity.getClass().toString().equals(BULLET)) {
+                                world.removeEntity(entity1);
+                            } else {
+                                world.removeEntity(entity);
+                            }
+                        }
                     }
                 }
             }
