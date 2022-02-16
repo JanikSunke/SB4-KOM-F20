@@ -17,17 +17,17 @@ public class AstroidPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        
         // Add entities to the world
-        astroid = createAstroid(gameData);
-        world.addEntity(astroid);
+        for (int i = 0; i < 8; i++) {
+            world.addEntity(createAstroid(gameData));
+        }
+
     }
 
     private Entity createAstroid(GameData gameData) {
-
         float deacceleration = 10;
-        float acceleration = 11;
-        float maxSpeed = 50;
+        float acceleration = 30;
+        float maxSpeed = 80;
         float rotationSpeed = 5;
         float radius = 8;
         float x = gameData.getDisplayHeight()/4;

@@ -2,21 +2,11 @@ package dk.sdu.mmmi.cbse.enemysystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.LEFT;
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.RIGHT;
-import static dk.sdu.mmmi.cbse.common.data.GameKeys.UP;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
 
-/**
- *
- * @author jcs
- */
 public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
@@ -25,13 +15,21 @@ public class EnemyControlSystem implements IEntityProcessingService {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
             MovingPart movingPart = enemy.getPart(MovingPart.class);
+            int move = (int)(Math.random() * 10);
+            if (move < 2) {
+                movingPart.setLeft(true);
+                movingPart.setRight(false);
+            } else if (move > 9) {
+                movingPart.setRight(true);
+                movingPart.setLeft(false);
+            } else {
+                movingPart.setLeft(false);
+                movingPart.setRight(false);
+            }
+            if (move < 2) {
+                movingPart.setUp(true);
+            }
 
-            int moveSelector = (int)(Math.random()*4)+1;
-            movingPart.setLeft(moveSelector == 1);
-            movingPart.setRight(moveSelector == 2);
-            movingPart.setUp(moveSelector == 3);
-            
-            
             movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
 
@@ -46,23 +44,20 @@ public class EnemyControlSystem implements IEntityProcessingService {
         float x = positionPart.getX();
         float y = positionPart.getY();
         float radians = positionPart.getRadians();
-        float radius = entity.getRadius();
 
-        shapex[0] = (float) (x + Math.cos(radians + 4 * 3.1415f / 5) * radius);
-        shapey[0] = (float) (y + Math.sin(radians + 4 * 3.1145f / 5) * radius);
+        shapex[0] = (float) (x + Math.cos(radians) * 4);
+        shapey[0] = (float) (y + Math.sin(radians) * 4);
 
-        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * radius);
-        shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5) * radius);
+        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 10);
+        shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5) * 10);
 
-        shapex[2] = (float) (x - Math.cos(radians + 4 * 3.1415f / 5) * radius);
-        shapey[2] = (float) (y - Math.sin(radians + 4 * 3.1415f / 5) * radius);
+        shapex[2] = (float) (x + Math.cos(radians + 3.1415f) * 12);
+        shapey[2] = (float) (y + Math.sin(radians + 3.1415f) * 12);
 
-        shapex[3] = (float) (x - Math.cos(radians - 4 * 3.1415f / 5) * radius);
-        shapey[3] = (float) (y - Math.sin(radians - 4 * 3.1145f / 5) * radius);
-
+        shapex[3] = (float) (x + Math.cos(radians + 4 * 3.1415f / 5) * 10);
+        shapey[3] = (float) (y + Math.sin(radians + 4 * 3.1415f / 5) * 10);
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
     }
-
 }
