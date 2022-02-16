@@ -1,27 +1,30 @@
-package dk.sdu.mmmi.cbse.playersystem;
+package dk.sdu.mmmi.cbse.enemysystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.data.entityparts.*;
+import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
-public class PlayerPlugin implements IGamePluginService {
+public class EnemyPlugin implements IGamePluginService {
 
-    private Entity player;
+    private Entity enemy;
 
-    public PlayerPlugin() {
+    public EnemyPlugin() {
     }
 
     @Override
     public void start(GameData gameData, World world) {
         
         // Add entities to the world
-        player = createPlayerShip(gameData);
-        world.addEntity(player);
+        world.addEntity(createEnemyShip(gameData));
+        world.addEntity(createEnemyShip(gameData));
+
+
     }
 
-    private Entity createPlayerShip(GameData gameData) {
+    private Entity createEnemyShip(GameData gameData) {
 
         float deacceleration = 10;
         float acceleration = 200;
@@ -32,19 +35,18 @@ public class PlayerPlugin implements IGamePluginService {
         float radians = 3.1415f / 2;
         float radius = 8;
         
-        Entity playerShip = new Player();
-        playerShip.setRadius(radius);
-        playerShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
-        playerShip.add(new PositionPart(x, y, radians));
-        playerShip.add(new LifePart(3, -1));
+        Entity enemyShip = new Enemy();
+        enemyShip.setRadius(radius);
+        enemyShip.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
+        enemyShip.add(new PositionPart(x, y, radians));
         
-        return playerShip;
+        return enemyShip;
     }
 
     @Override
     public void stop(GameData gameData, World world) {
         // Remove entities
-        world.removeEntity(player);
+        world.removeEntity(enemy);
     }
 
 }

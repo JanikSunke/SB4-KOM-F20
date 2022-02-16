@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.cbse.playersystem;
+package dk.sdu.mmmi.cbse.enemysystem;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -9,11 +9,6 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-
-
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
@@ -22,23 +17,25 @@ import static java.lang.Math.sqrt;
  *
  * @author jcs
  */
-public class PlayerControlSystem implements IEntityProcessingService {
+public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
 
-        for (Entity player : world.getEntities(Player.class)) {
-            PositionPart positionPart = player.getPart(PositionPart.class);
-            MovingPart movingPart = player.getPart(MovingPart.class);
+        for (Entity enemy : world.getEntities(Enemy.class)) {
+            PositionPart positionPart = enemy.getPart(PositionPart.class);
+            MovingPart movingPart = enemy.getPart(MovingPart.class);
 
-            movingPart.setLeft(gameData.getKeys().isDown(LEFT));
-            movingPart.setRight(gameData.getKeys().isDown(RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(UP));
+            int moveSelector = (int)(Math.random()*4)+1;
+            movingPart.setLeft(moveSelector == 1);
+            movingPart.setRight(moveSelector == 2);
+            movingPart.setUp(moveSelector == 3);
             
-            movingPart.process(gameData, player);
-            positionPart.process(gameData, player);
+            
+            movingPart.process(gameData, enemy);
+            positionPart.process(gameData, enemy);
 
-            updateShape(player);
+            updateShape(enemy);
         }
     }
 
@@ -51,17 +48,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
         float radians = positionPart.getRadians();
         float radius = entity.getRadius();
 
-        shapex[0] = (float) (x + Math.cos(radians) * radius);
-        shapey[0] = (float) (y + Math.sin(radians) * radius);
+        shapex[0] = (float) (x + Math.cos(radians + 4 * 3.1415f / 5) * radius);
+        shapey[0] = (float) (y + Math.sin(radians + 4 * 3.1145f / 5) * radius);
 
         shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * radius);
         shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5) * radius);
 
-        shapex[2] = (float) (x + Math.cos(radians + 3.1415f) * 5 * (5/radius));
-        shapey[2] = (float) (y + Math.sin(radians + 3.1415f) * 5 * (5/radius));
+        shapex[2] = (float) (x - Math.cos(radians + 4 * 3.1415f / 5) * radius);
+        shapey[2] = (float) (y - Math.sin(radians + 4 * 3.1415f / 5) * radius);
 
-        shapex[3] = (float) (x + Math.cos(radians + 4 * 3.1415f / 5) * radius);
-        shapey[3] = (float) (y + Math.sin(radians + 4 * 3.1415f / 5) * radius);
+        shapex[3] = (float) (x - Math.cos(radians - 4 * 3.1415f / 5) * radius);
+        shapey[3] = (float) (y - Math.sin(radians - 4 * 3.1145f / 5) * radius);
+
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
