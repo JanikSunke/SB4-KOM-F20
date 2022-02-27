@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.playersystem;
 
+import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
@@ -8,12 +9,14 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 
 @ServiceProviders(value = {
     @ServiceProvider(service = IEntityProcessingService.class),})
 public class PlayerControlSystem implements IEntityProcessingService {
+    private int shoot = 0;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -26,6 +29,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
             movingPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             movingPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
             movingPart.setUp(gameData.getKeys().isDown(GameKeys.UP));
+
+            shoot++;
+            if (shoot % 50 == 1) {
+                Lookup.getDefault().lookup(BulletSPI.class).updateShape(player, world);
+            }
+
 
             movingPart.process(gameData, player);
             positionPart.process(gameData, player);

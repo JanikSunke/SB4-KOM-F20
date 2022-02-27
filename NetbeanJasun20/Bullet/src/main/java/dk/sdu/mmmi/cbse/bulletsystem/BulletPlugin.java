@@ -33,7 +33,9 @@ public class BulletPlugin implements IGamePluginService {
         float radians = 3.1415f / 2;
 
         Entity bullet = new Bullet();
-        bullet.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
+        MovingPart movingPart = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
+        movingPart.setUp(true);
+        bullet.add(movingPart);
         bullet.add(new PositionPart(x, y, radians));
         bullet.add(new LifePart(-1));
         bullet.setRadius(10);

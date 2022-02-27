@@ -20,10 +20,10 @@ public class ShootingControlSystem implements IEntityProcessingService {
                     PositionPart playerMov = player.getPart(PositionPart.class);
                     shoot++;
                     if (shoot % 30 == 1) {
-                        movingPart.setUp(true);
                         positionPart.setPosition(playerMov.getX(), playerMov.getY());
                         positionPart.setRadians(playerMov.getRadians());
                     }
+                    movingPart.setUp(true);
                     movingPart.setLeft(false);
                     movingPart.setRight(false);
 

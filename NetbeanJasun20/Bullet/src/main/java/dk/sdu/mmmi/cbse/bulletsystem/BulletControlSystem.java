@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.cbse.bulletsystem;
 
+import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -11,36 +12,25 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 
-@ServiceProvider(service = IEntityProcessingService.class)
-public class BulletControlSystem implements IEntityProcessingService {
-    private int shoot = 0;
+@ServiceProviders(value = {
+@ServiceProvider(service = IEntityProcessingService.class), @ServiceProvider(service = BulletSPI.class)})
+public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
 
     @Override
     public void process(GameData gameData, World world) {
-
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            for (Entity player: world.getEntities()) {
-                if (player.getClass().toString().equals("class dk.sdu.mmmi.cbse.playersystem.Player")) {
-                    PositionPart positionPart = bullet.getPart(PositionPart.class);
-                    MovingPart movingPart = bullet.getPart(MovingPart.class);
-                    PositionPart playerMov = player.getPart(PositionPart.class);
-                    shoot++;
-                    if (shoot % 30 == 1) {
-                        movingPart.setUp(true);
-                        positionPart.setPosition(playerMov.getX(), playerMov.getY());
-                        positionPart.setRadians(playerMov.getRadians());
-                    }
-                    movingPart.setLeft(false);
-                    movingPart.setRight(false);
+            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            MovingPart movingPart = bullet.getPart(MovingPart.class);
+            movingPart.setUp(true);
+            movingPart.setLeft(false);
+            movingPart.setRight(false);
 
-                    movingPart.process(gameData, bullet);
-                    positionPart.process(gameData, bullet);
+            movingPart.process(gameData, bullet);
+            positionPart.process(gameData, bullet);
 
-                    updateShape(bullet);
-                }
-            }
-
+            updateShape(bullet);
         }
     }
 
@@ -62,5 +52,16 @@ public class BulletControlSystem implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
+    }
+
+    @Override
+    public void updateShape(Entity entity, World world) {
+        for (Entity bullet : world.getEntities(Bullet.class)) {
+            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            PositionPart playerMov = entity.getPart(PositionPart.class);
+            positionPart.setPosition(playerMov.getX(), playerMov.getY());
+            positionPart.setRadians(playerMov.getRadians());
+        }
+
     }
 }
