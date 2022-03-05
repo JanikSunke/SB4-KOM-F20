@@ -44,11 +44,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         float y = positionPart.getY();
         float radians = positionPart.getRadians();
 
-        shapex[0] = (float) (x + Math.cos(radians) * 4);
-        shapey[0] = (float) (y + Math.sin(radians) * 4);
+        shapex[0] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 4);
+        shapey[0] = (float) (y + Math.cos(radians - 4 * 3.1415f / 5) * 4);
 
-        shapex[1] = (float) (x + Math.cos(radians) * 8);
-        shapey[1] = (float) (y + Math.sin(radians) * 8);
+        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 8);
+        shapey[1] = (float) (y + Math.cos(radians - 4 * 3.1415f / 5) * 8);
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
@@ -59,7 +59,9 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         for (Entity bullet : world.getEntities(Bullet.class)) {
             PositionPart positionPart = bullet.getPart(PositionPart.class);
             PositionPart playerMov = entity.getPart(PositionPart.class);
-            positionPart.setPosition(playerMov.getX(), playerMov.getY());
+            float bx = (float) cos(playerMov.getRadians()) * bullet.getRadius();
+            float by = (float) sin(playerMov.getRadians()) * bullet.getRadius();
+            positionPart.setPosition(playerMov.getX() + bx, playerMov.getY() + by);
             positionPart.setRadians(playerMov.getRadians());
         }
 

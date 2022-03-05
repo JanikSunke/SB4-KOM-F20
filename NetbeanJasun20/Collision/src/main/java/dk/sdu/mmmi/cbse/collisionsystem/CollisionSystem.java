@@ -21,9 +21,7 @@ public class CollisionSystem implements IPostEntityProcessingService{
             for(Entity entity1 : world.getEntities()){
                 if (!(entity.getClass() == entity1.getClass())) {
                     if (collision(entity, entity1)) {
-                        if ((entity.getClass().toString().equals(BULLET) && entity1.getClass().toString().equals(PLAYER)) || (entity1.getClass().toString().equals(BULLET) && entity.getClass().toString().equals(PLAYER))) {
-                            break;
-                        } else if (entity1.getClass().toString().equals(PLAYER) || entity1.getClass().toString().equals(ENEMY)) {
+                        if (entity1.getClass().toString().equals(PLAYER) || entity1.getClass().toString().equals(ENEMY)) {
                             world.removeEntity(entity1);
                         } else {
                             System.out.println("\n\n\n\n\n");
