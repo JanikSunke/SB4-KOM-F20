@@ -14,6 +14,7 @@ public class ShootingControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Shooting.class)) {
             for (Entity player: world.getEntities()) {
+                //This is bad code, because there still is a kind of dependency, so I changed it in the next lab.
                 if (player.getClass().toString().equals("class dk.sdu.mmmi.cbse.playersystem.Player")) {
                     PositionPart positionPart = bullet.getPart(PositionPart.class);
                     MovingPart movingPart = bullet.getPart(MovingPart.class);

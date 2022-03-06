@@ -9,7 +9,7 @@ import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import org.openide.util.lookup.ServiceProvider;
 
 @ServiceProvider(service = IPostEntityProcessingService.class)
-public class CollisionSystem implements IPostEntityProcessingService{
+public class CollisionSystem implements IPostEntityProcessingService {
     String PLAYER = "class dk.sdu.mmmi.cbse.playersystem.Player";
     String ENEMY = "class dk.sdu.mmmi.cbse.enemysystem.Enemy";
     int kills = 0;
